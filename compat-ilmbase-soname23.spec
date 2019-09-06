@@ -6,31 +6,23 @@
 #
 Name     : compat-ilmbase-soname23
 Version  : 2.2.1
-Release  : 6
+Release  : 7
 URL      : http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.1.tar.gz
 Source0  : http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.1.tar.gz
-Source99 : http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.1.tar.gz.sig
+Source1 : http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.1.tar.gz.sig
 Summary  : Base math and exception libraries
 Group    : Development/Tools
 License  : BSD-3-Clause
 Requires: compat-ilmbase-soname23-lib = %{version}-%{release}
 Requires: compat-ilmbase-soname23-license = %{version}-%{release}
 BuildRequires : buildreq-cmake
+# Suppress generation of debuginfo
+%global debug_package %{nil}
 
 %description
 ABOUT THE ILMBASE LIBRARIES
 ----------------------------
 Half is a class that encapsulates our 16-bit floating-point format.
-
-%package dev
-Summary: dev components for the compat-ilmbase-soname23 package.
-Group: Development
-Requires: compat-ilmbase-soname23-lib = %{version}-%{release}
-Provides: compat-ilmbase-soname23-devel = %{version}-%{release}
-
-%description dev
-dev components for the compat-ilmbase-soname23 package.
-
 
 %package lib
 Summary: lib components for the compat-ilmbase-soname23 package.
@@ -56,94 +48,97 @@ license components for the compat-ilmbase-soname23 package.
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1549593726
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1567811885
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1549593726
+export SOURCE_DATE_EPOCH=1567811885
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/compat-ilmbase-soname23
 cp COPYING %{buildroot}/usr/share/package-licenses/compat-ilmbase-soname23/COPYING
 cp LICENSE %{buildroot}/usr/share/package-licenses/compat-ilmbase-soname23/LICENSE
 %make_install
+## Remove excluded files
+rm -f %{buildroot}/usr/include/OpenEXR/Iex.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexBaseExc.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexErrnoExc.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexExport.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexForward.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexMacros.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexMathExc.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexMathFloatExc.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexMathFpu.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexMathIeeeExc.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexNamespace.h
+rm -f %{buildroot}/usr/include/OpenEXR/IexThrowErrnoExc.h
+rm -f %{buildroot}/usr/include/OpenEXR/IlmBaseConfig.h
+rm -f %{buildroot}/usr/include/OpenEXR/IlmThread.h
+rm -f %{buildroot}/usr/include/OpenEXR/IlmThreadExport.h
+rm -f %{buildroot}/usr/include/OpenEXR/IlmThreadForward.h
+rm -f %{buildroot}/usr/include/OpenEXR/IlmThreadMutex.h
+rm -f %{buildroot}/usr/include/OpenEXR/IlmThreadNamespace.h
+rm -f %{buildroot}/usr/include/OpenEXR/IlmThreadPool.h
+rm -f %{buildroot}/usr/include/OpenEXR/IlmThreadSemaphore.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathBox.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathBoxAlgo.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathColor.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathColorAlgo.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathEuler.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathExc.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathExport.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathForward.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathFrame.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathFrustum.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathFrustumTest.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathFun.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathGL.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathGLU.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathHalfLimits.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathInt64.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathInterval.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathLimits.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathLine.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathLineAlgo.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathMath.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathMatrix.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathMatrixAlgo.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathNamespace.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathPlane.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathPlatform.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathQuat.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathRandom.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathRoots.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathShear.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathSphere.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathVec.h
+rm -f %{buildroot}/usr/include/OpenEXR/ImathVecAlgo.h
+rm -f %{buildroot}/usr/include/OpenEXR/half.h
+rm -f %{buildroot}/usr/include/OpenEXR/halfExport.h
+rm -f %{buildroot}/usr/include/OpenEXR/halfFunction.h
+rm -f %{buildroot}/usr/include/OpenEXR/halfLimits.h
+rm -f %{buildroot}/usr/lib64/libHalf.so
+rm -f %{buildroot}/usr/lib64/libIex.so
+rm -f %{buildroot}/usr/lib64/libIexMath.so
+rm -f %{buildroot}/usr/lib64/libIlmThread.so
+rm -f %{buildroot}/usr/lib64/libImath.so
+rm -f %{buildroot}/usr/lib64/pkgconfig/IlmBase.pc
 
 %files
 %defattr(-,root,root,-)
-
-%files dev
-%defattr(-,root,root,-)
-%exclude /usr/include/OpenEXR/Iex.h
-%exclude /usr/include/OpenEXR/IexBaseExc.h
-%exclude /usr/include/OpenEXR/IexErrnoExc.h
-%exclude /usr/include/OpenEXR/IexExport.h
-%exclude /usr/include/OpenEXR/IexForward.h
-%exclude /usr/include/OpenEXR/IexMacros.h
-%exclude /usr/include/OpenEXR/IexMathExc.h
-%exclude /usr/include/OpenEXR/IexMathFloatExc.h
-%exclude /usr/include/OpenEXR/IexMathFpu.h
-%exclude /usr/include/OpenEXR/IexMathIeeeExc.h
-%exclude /usr/include/OpenEXR/IexNamespace.h
-%exclude /usr/include/OpenEXR/IexThrowErrnoExc.h
-%exclude /usr/include/OpenEXR/IlmBaseConfig.h
-%exclude /usr/include/OpenEXR/IlmThread.h
-%exclude /usr/include/OpenEXR/IlmThreadExport.h
-%exclude /usr/include/OpenEXR/IlmThreadForward.h
-%exclude /usr/include/OpenEXR/IlmThreadMutex.h
-%exclude /usr/include/OpenEXR/IlmThreadNamespace.h
-%exclude /usr/include/OpenEXR/IlmThreadPool.h
-%exclude /usr/include/OpenEXR/IlmThreadSemaphore.h
-%exclude /usr/include/OpenEXR/ImathBox.h
-%exclude /usr/include/OpenEXR/ImathBoxAlgo.h
-%exclude /usr/include/OpenEXR/ImathColor.h
-%exclude /usr/include/OpenEXR/ImathColorAlgo.h
-%exclude /usr/include/OpenEXR/ImathEuler.h
-%exclude /usr/include/OpenEXR/ImathExc.h
-%exclude /usr/include/OpenEXR/ImathExport.h
-%exclude /usr/include/OpenEXR/ImathForward.h
-%exclude /usr/include/OpenEXR/ImathFrame.h
-%exclude /usr/include/OpenEXR/ImathFrustum.h
-%exclude /usr/include/OpenEXR/ImathFrustumTest.h
-%exclude /usr/include/OpenEXR/ImathFun.h
-%exclude /usr/include/OpenEXR/ImathGL.h
-%exclude /usr/include/OpenEXR/ImathGLU.h
-%exclude /usr/include/OpenEXR/ImathHalfLimits.h
-%exclude /usr/include/OpenEXR/ImathInt64.h
-%exclude /usr/include/OpenEXR/ImathInterval.h
-%exclude /usr/include/OpenEXR/ImathLimits.h
-%exclude /usr/include/OpenEXR/ImathLine.h
-%exclude /usr/include/OpenEXR/ImathLineAlgo.h
-%exclude /usr/include/OpenEXR/ImathMath.h
-%exclude /usr/include/OpenEXR/ImathMatrix.h
-%exclude /usr/include/OpenEXR/ImathMatrixAlgo.h
-%exclude /usr/include/OpenEXR/ImathNamespace.h
-%exclude /usr/include/OpenEXR/ImathPlane.h
-%exclude /usr/include/OpenEXR/ImathPlatform.h
-%exclude /usr/include/OpenEXR/ImathQuat.h
-%exclude /usr/include/OpenEXR/ImathRandom.h
-%exclude /usr/include/OpenEXR/ImathRoots.h
-%exclude /usr/include/OpenEXR/ImathShear.h
-%exclude /usr/include/OpenEXR/ImathSphere.h
-%exclude /usr/include/OpenEXR/ImathVec.h
-%exclude /usr/include/OpenEXR/ImathVecAlgo.h
-%exclude /usr/include/OpenEXR/half.h
-%exclude /usr/include/OpenEXR/halfExport.h
-%exclude /usr/include/OpenEXR/halfFunction.h
-%exclude /usr/include/OpenEXR/halfLimits.h
-%exclude /usr/lib64/libHalf.so
-%exclude /usr/lib64/libIex.so
-%exclude /usr/lib64/libIexMath.so
-%exclude /usr/lib64/libIlmThread.so
-%exclude /usr/lib64/libImath.so
-%exclude /usr/lib64/pkgconfig/IlmBase.pc
 
 %files lib
 %defattr(-,root,root,-)
@@ -160,5 +155,5 @@ cp LICENSE %{buildroot}/usr/share/package-licenses/compat-ilmbase-soname23/LICEN
 
 %files license
 %defattr(0644,root,root,0755)
-%exclude /usr/share/package-licenses/compat-ilmbase-soname23/COPYING
-%exclude /usr/share/package-licenses/compat-ilmbase-soname23/LICENSE
+/usr/share/package-licenses/compat-ilmbase-soname23/COPYING
+/usr/share/package-licenses/compat-ilmbase-soname23/LICENSE
