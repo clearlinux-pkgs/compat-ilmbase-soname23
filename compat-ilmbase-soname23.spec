@@ -6,7 +6,7 @@
 #
 Name     : compat-ilmbase-soname23
 Version  : 2.2.1
-Release  : 7
+Release  : 8
 URL      : http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.1.tar.gz
 Source0  : http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.1.tar.gz
 Source1 : http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.1.tar.gz.sig
